@@ -28,11 +28,11 @@ def get_pos_delta(pos_d, pos_up):
 def update_pos(point):
     abc_x, abc_y = point[0]
     if abc_x > weght or abc_x <= 0:
-        point[1] = -1 * point[1]
-        # return (-1 * point[0][0]+point[1], point[0][1])
+        point[1] = -1 * point[1]*0.9
+        return (point[0][0]+point[1]+math.copysign(point[1], 2*point[1]), point[0][1])
     if abc_y > heght or abc_y <= 0:
-        point[2] = -1 * point[2]
-        # return (point[0][0], -1 * point[0][1] +point[2])
+        point[2] = -1 * point[2]*0.9
+        return (point[0][0], point[0][1] +point[2]+math.copysign(point[2], 2*point[2]))
     return (point[0][0] + point[1], point[0][1] + point[2])
 
 

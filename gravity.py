@@ -20,8 +20,7 @@ g_const = 0.1
 def get_pos_delta(pos_d, pos_up):
     """подсчитываем разницу координат и длину вектора"""
     radius = round(((-pos_d[0] + pos_up[0]) ** 2 + (-pos_d[1] + pos_up[1]) ** 2) ** 0.5, 4)
-    # if radius == 0:
-    #     radius = 0.00001
+
     return (-pos_d[0] + pos_up[0], -pos_d[1] + pos_up[1], radius)
 
 
@@ -91,7 +90,7 @@ while True:
             exit()
         if event.type == pygame.MOUSEBUTTONUP:
             pos_up = pygame.mouse.get_pos()
-            mass_p = 1000 + round(9000 * random.random(), 10)
+            mass_p = 1000 + round(9000 * random.random(), 2)
             speed_x, speed_y = get_pos_delta(pos_d, pos_up)[:2]
             mass_point.append([pos_d, speed_x * 0.001, speed_y * 0.001, mass_p])
             color_point_mass(mass_point)

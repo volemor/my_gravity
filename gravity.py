@@ -47,9 +47,9 @@ def update_speed(mass_point, cur_point):
 
     for point in mass_point:
         if point != cur_point:
-            ## TODO: d_x, d_y, r
+            ## d_x, d_y, r
             d_x, d_y, radius = get_pos_delta(cur_point[0], point[0])
-            # TODO:f_x, f_y
+            # f_x, f_y
             if radius <= 5:
                 if cur_point[3] > point[3]:
                     cur_point[3] += point[3]
@@ -62,15 +62,11 @@ def update_speed(mass_point, cur_point):
                     mass_point.remove(cur_point)
                     screen.fill(BLACK)
                     return 0,0
-
-
             Force = point[3] * cur_point[3] * g_const / (radius ** 2)
             f_x, f_y = Force * d_x / radius, Force * d_y / radius
-
-            # TODO: a-x,a-y
             a_x += f_x / cur_point[3]
             a_y += f_y / cur_point[3]
-            # TODO:v-x, v-y
+            # v-x, v-y
 
     return a_x * delta_time, a_y * delta_time
 

@@ -12,6 +12,9 @@ BLACK = (0, 0, 0)
 timer = 0
 mass_point = []  # pos_x,pos_y, deltaV_x, deltaV_y, mass
 delta_time = 0.01
+max_mass = 0
+
+g_const = 0.1
 
 
 def get_pos_delta(pos_d, pos_up):
@@ -22,23 +25,26 @@ def get_pos_delta(pos_d, pos_up):
     return (-pos_d[0] + pos_up[0], -pos_d[1] + pos_up[1], radius)
 
 
-def update_pos(pos, speed):
-    return (pos[0] + speed[0], pos[1] + speed[1])
+def update_pos(point):
+    abc_x, abc_y = point[0]
+    if abc_x > weght or abc_x <= 0:
+        point[1] = -1 * point[1]
+        # return (-1 * point[0][0]+point[1], point[0][1])
+    if abc_y > heght or abc_y <= 0:
+        point[2] = -1 * point[2]
+        # return (point[0][0], -1 * point[0][1] +point[2])
+    return (point[0][0] + point[1], point[0][1] + point[2])
 
 
-g_const = 0.1
+def color_point_mass(mass):
+    global max_mass
+    for point in mass:
+        if point[3] > max_mass:
+            max_mass = point[3]
 
 
 def update_speed(mass_point, cur_point):
     a_x, a_y = 0, 0
-
-    abc_x, abc_y = cur_point[0]
-    if abc_x > weght or abc_x < 0:
-        cur_point[1] = -1 * cur_point[1]
-        return 0, 0
-    if abc_y > heght or abc_y < 0:
-        cur_point[2] = -1 * cur_point[2]
-        return 0, 0
 
     def leght_r(pos_0, pos_i):
         return round(((pos_0[0] - pos_i[0]) ** 2 + (pos_0[1] - pos_i[1]) ** 2) ** 0.5, 0)
@@ -54,11 +60,13 @@ def update_speed(mass_point, cur_point):
                     # cur_point[1], cur_point[2] = 0, 0
                     mass_point.remove(point)
                     screen.fill(BLACK)
+                    color_point_mass(mass_point)
                     continue
                 else:
                     point[3] += cur_point[3]
                     mass_point.remove(cur_point)
                     screen.fill(BLACK)
+                    color_point_mass(mass_point)
                     return 0, 0
             Force = point[3] * cur_point[3] * g_const / (radius ** 2)
             f_x, f_y = Force * d_x / radius, Force * d_y / radius
@@ -90,6 +98,7 @@ while True:
             mass_p = 1000 + round(9000 * random.random(), 10)
             speed_x, speed_y = get_pos_delta(pos_d, pos_up)[:2]
             mass_point.append([pos_d, speed_x * 0.001, speed_y * 0.001, mass_p])
+            color_point_mass(mass_point)
             # pygame.draw.line(screen, (100, 250, 100), pos_d, pos_up, 2)
             print(mass_point)
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -98,8 +107,8 @@ while True:
     if len(mass_point) > 0:
         for point in mass_point:
             pygame.draw.circle(screen, BLACK, point[0], 5, 5)
-            point[0] = update_pos(pos=point[0], speed=(point[1], point[2]))
-            pygame.draw.circle(screen, RED, point[0], 5, 5)
+            point[0] = update_pos(point)
+            pygame.draw.circle(screen, (255, 255 * point[3] / max_mass, 12), point[0], 5, 5)
     if len(mass_point) > 1:
         for point in mass_point:
             dx, dy = update_speed(mass_point, point)

@@ -28,11 +28,11 @@ def get_pos_delta(pos_d, pos_up):
 def update_pos(point):
     abc_x, abc_y = point[0]
     if abc_x > weght or abc_x <= 0:
-        point[1] = -1 * point[1]*0.9
-        return (point[0][0]+point[1]+math.copysign(point[1], 2*point[1]), point[0][1])
+        point[1] = -1 * point[1] * 0.7
+        return (point[0][0] + point[1] + math.copysign(point[1], 2 * point[1]), point[0][1])
     if abc_y > heght or abc_y <= 0:
-        point[2] = -1 * point[2]*0.9
-        return (point[0][0], point[0][1] +point[2]+math.copysign(point[2], 2*point[2]))
+        point[2] = -1 * point[2] * 0.7
+        return (point[0][0], point[0][1] + point[2] + math.copysign(point[2], 2 * point[2]))
     return (point[0][0] + point[1], point[0][1] + point[2])
 
 
@@ -80,14 +80,6 @@ def update_speed(mass_point, cur_point):
 sleep_u = 0
 while True:
     pygame.time.delay(30)
-    if datetime.datetime.now().second // 2 == 0 and sleep_u == 0:
-        # time.sleep(0.1)
-        # screen.fill(BLACK)
-        print(mass_point)
-        sleep_u = 1
-        continue
-    if datetime.datetime.now().second // 2 != 0 and sleep_u == 1:
-        sleep_u = 0
     # timer += 0.2
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -108,7 +100,7 @@ while True:
         for point in mass_point:
             pygame.draw.circle(screen, BLACK, point[0], 5, 5)
             point[0] = update_pos(point)
-            pygame.draw.circle(screen, (255, 255 * point[3] / max_mass, 12), point[0], 5, 5)
+            pygame.draw.circle(screen, (2, 50+ 200 * point[3] / max_mass, 12), point[0], 5, 5)
     if len(mass_point) > 1:
         for point in mass_point:
             dx, dy = update_speed(mass_point, point)

@@ -4,10 +4,9 @@ import pygame
 import time
 import math
 
-
-weght, heght = 1000,1000
+weght, heght = 800, 800
 pygame.init()
-screen = pygame.display.set_mode((weght,heght))
+screen = pygame.display.set_mode((weght, heght))
 RED = (225, 0, 0)
 BLACK = (0, 0, 0)
 timer = 0
@@ -35,12 +34,11 @@ def update_speed(mass_point, cur_point):
 
     abc_x, abc_y = cur_point[0]
     if abc_x > weght or abc_x < 0:
-        cur_point[1] = -1 * math.copysign(cur_point[1], abc_x)
+        cur_point[1] = -1 * cur_point[1]
         return 0, 0
     if abc_y > heght or abc_y < 0:
-        cur_point[2] =  -1 * math.copysign(cur_point[2], abc_y)
+        cur_point[2] = -1 * cur_point[2]
         return 0, 0
-
 
     def leght_r(pos_0, pos_i):
         return round(((pos_0[0] - pos_i[0]) ** 2 + (pos_0[1] - pos_i[1]) ** 2) ** 0.5, 0)
@@ -61,7 +59,7 @@ def update_speed(mass_point, cur_point):
                     point[3] += cur_point[3]
                     mass_point.remove(cur_point)
                     screen.fill(BLACK)
-                    return 0,0
+                    return 0, 0
             Force = point[3] * cur_point[3] * g_const / (radius ** 2)
             f_x, f_y = Force * d_x / radius, Force * d_y / radius
             a_x += f_x / cur_point[3]

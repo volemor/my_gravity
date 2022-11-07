@@ -65,14 +65,11 @@ def update_speed(mass_point, cur_point):
                     time.sleep(0.1)
                     pygame.draw.circle(screen, (0, 0, 0), point[0], 10, 10)
                     mass_point.remove(point)
-                    # screen.fill(BLACK)
                     # pygame.draw.circle(screen, (0,0,0), point[0], 30, 5)
                     color_point_mass(mass_point)
                     continue
                 else:
                     point[3] += cur_point[3]
-
-                    # screen.fill(BLACK)
                     pygame.draw.circle(screen, (255, 255, 255), point[0], 30, 1)
                     pygame.draw.circle(screen, (0, 0, 0), point[0], 10, 10)
                     mass_point.remove(cur_point)

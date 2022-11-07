@@ -4,7 +4,7 @@ import pygame
 import time
 import math
 
-weght, heght = 800, 800
+weght, heght = 1200, 800
 pygame.init()
 screen = pygame.display.set_mode((weght, heght))
 RED = (225, 0, 0)
@@ -57,18 +57,25 @@ def update_speed(mass_point, cur_point):
             ## d_x, d_y, r
             d_x, d_y, radius = get_pos_delta(cur_point[0], point[0])
             # f_x, f_y
-            if radius <= 5:
+            if radius <= 2:
                 if cur_point[3] > point[3]:
                     cur_point[3] += point[3]
                     # cur_point[1], cur_point[2] = 0, 0
+                    pygame.draw.circle(screen, (255, 255, 255), point[0], 30, 1)
+                    time.sleep(0.1)
+                    pygame.draw.circle(screen, (0, 0, 0), point[0], 10, 10)
                     mass_point.remove(point)
-                    screen.fill(BLACK)
+                    # screen.fill(BLACK)
+                    # pygame.draw.circle(screen, (0,0,0), point[0], 30, 5)
                     color_point_mass(mass_point)
                     continue
                 else:
                     point[3] += cur_point[3]
+
+                    # screen.fill(BLACK)
+                    pygame.draw.circle(screen, (255, 255, 255), point[0], 30, 1)
+                    pygame.draw.circle(screen, (0, 0, 0), point[0], 10, 10)
                     mass_point.remove(cur_point)
-                    screen.fill(BLACK)
                     color_point_mass(mass_point)
                     return 0, 0
             Force = point[3] * cur_point[3] * g_const / (radius ** 2)

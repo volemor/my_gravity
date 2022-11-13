@@ -17,6 +17,8 @@ super_nova_list = []
 g_const = 0.1
 
 
+
+
 def get_pos_delta(pos_d, pos_up):
     """подсчитываем разницу координат и длину вектора"""
     radius = round(((-pos_d[0] + pos_up[0]) ** 2 + (-pos_d[1] + pos_up[1]) ** 2) ** 0.5, 4)
@@ -24,19 +26,34 @@ def get_pos_delta(pos_d, pos_up):
     return (-pos_d[0] + pos_up[0], -pos_d[1] + pos_up[1], radius)
 
 
+def max_mass_target(point):
+    target = [((-20, 0), (20, 0)),
+              ((0, -20), (0, 20))]
+
+    for item in target:
+        pygame.draw.line(screen, (100, 100, 100), point[0] + item[0][0], point[0] + item[1][0])
+
+
 def update_pos(point):
     abc_x, abc_y = point[0]
     if abc_x > weght or abc_x <= 0:
-        point[1] = -1 * point[1] * 0.6
+        point[1] = -1 * point[1] * 0.7
         if point[3] == max_mass:
-            point[3] = point[3]*0.8
-        return (point[0][0] + point[1] + math.copysign(point[1], 2 * point[1]), point[0][1])
+            point[3] = point[3] * 0.8
+        return (point[0][0] + point[1] / 0.7 + math.copysign(point[1], 2 * point[1]), point[0][1])
     if abc_y > heght or abc_y <= 0:
-        point[2] = -1 * point[2] * 0.6
+        point[2] = -1 * point[2] * 0.7
         if point[3] == max_mass:
-            point[3] = point[3]*0.8
-        return (point[0][0], point[0][1] + point[2] + math.copysign(point[2], 2 * point[2]))
+            point[3] = point[3] * 0.8
+        return (point[0][0], point[0][1] + point[2] / 0.7 + math.copysign(point[2], 2 * point[2]))
     return (point[0][0] + point[1], point[0][1] + point[2])
+
+
+def collapse_area(point):
+    if point[0][0] > weght * 0.15 and point[0][0] < weght * 0.85:
+        if point[0][1] > heght * 0.15 and point[0][1] < heght * 0.85:
+            return True
+    return False
 
 
 def color_point_mass(mass):
@@ -49,6 +66,7 @@ def color_point_mass(mass):
 def update_speed(mass_point, cur_point):
     a_x, a_y = 0, 0
     global super_nova_list
+
     def leght_r(pos_0, pos_i):
         return round(((pos_0[0] - pos_i[0]) ** 2 + (pos_0[1] - pos_i[1]) ** 2) ** 0.5, 0)
 
@@ -56,28 +74,31 @@ def update_speed(mass_point, cur_point):
         if point != cur_point:
             ## d_x, d_y, r
             d_x, d_y, radius = get_pos_delta(cur_point[0], point[0])
+            if radius == 0:
+                continue
             # f_x, f_y
             if radius <= 2:
-                if cur_point[3] > point[3]:
-                    cur_point[3] += point[3]
-                    # cur_point[1], cur_point[2] = 0, 0
-                    super_nova_list.append(point[0])
-                    pygame.draw.circle(screen, (255, 255, 255), point[0], 30, 1)
-                    time.sleep(0.1)
-                    pygame.draw.circle(screen, (0, 0, 0), point[0], 10, 10)
-                    mass_point.remove(point)
-                    # pygame.draw.circle(screen, (0,0,0), point[0], 30, 5)
-                    color_point_mass(mass_point)
-                    continue
-                else:
-                    point[3] += cur_point[3]
-                    pygame.draw.circle(screen, (255, 255, 255), point[0], 30, 1)
-                    super_nova_list.append(point[0])
-                    pygame.draw.circle(screen, (0, 0, 0), point[0], 10, 10)
-                    mass_point.remove(cur_point)
-                    color_point_mass(mass_point)
-                    return 0, 0
-            if len(super_nova_list)>15:
+                if collapse_area(point):
+                    if cur_point[3] > point[3]:
+                        cur_point[3] += point[3]
+                        # cur_point[1], cur_point[2] = 0, 0
+                        super_nova_list.append(point[0])
+                        pygame.draw.circle(screen, (255, 255, 255), point[0], 30, 1)
+                        time.sleep(0.1)
+                        pygame.draw.circle(screen, (0, 0, 0), point[0], 10, 10)
+                        mass_point.remove(point)
+                        # pygame.draw.circle(screen, (0,0,0), point[0], 30, 5)
+                        color_point_mass(mass_point)
+                        continue
+                    else:
+                        point[3] += cur_point[3]
+                        pygame.draw.circle(screen, (255, 255, 255), point[0], 30, 1)
+                        super_nova_list.append(point[0])
+                        pygame.draw.circle(screen, (0, 0, 0), point[0], 10, 10)
+                        mass_point.remove(cur_point)
+                        color_point_mass(mass_point)
+                        return 0, 0
+            if len(super_nova_list) > 15:
                 pygame.draw.circle(screen, (0, 0, 0), super_nova_list[0], 30, 1)
                 super_nova_list = super_nova_list[1:]
 
@@ -113,7 +134,9 @@ while True:
         for point in mass_point:
             pygame.draw.circle(screen, BLACK, point[0], 5, 5)
             point[0] = update_pos(point)
-            pygame.draw.circle(screen, (2, 10+ 240 * point[3] / max_mass, 12), point[0], 5, 5)
+            pygame.draw.circle(screen, (2, 10 + 240 * point[3] / max_mass, 12), point[0], 5, 5)
+            # if point[3] == max_mass:
+            #     max_mass_target(point)
     if len(mass_point) > 1:
         for point in mass_point:
             dx, dy = update_speed(mass_point, point)

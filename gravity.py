@@ -35,18 +35,19 @@ def max_mass_target(point):
 def update_pos(point):
     abc_x, abc_y = point[0]
     if abc_x > weght - 5 or abc_x <= 5:
-        point[1] = -1 * point[1] * 0.9
+        point[1] = -1 * point[1] * 0.7
         if point[3] == max_mass:
             point[2] = point[2] * 0.4
             point[1] = point[1] * 0.4
-            # point[3] = point[3] * 1
-        return (point[0][0] + point[1] / 0.4 + math.copysign(point[1], 2 * point[1]), point[0][1])
+            return (point[0][0] + point[1] / 0.4 + math.copysign(point[1], 2 * point[1]), point[0][1])
+        return (point[0][0] + point[1] / 0.7 + math.copysign(point[1], 2 * point[1]), point[0][1])
     if abc_y > heght - 5 or abc_y <= 5:
-        point[2] = -1 * point[2] * 0.9
+        point[2] = -1 * point[2] * 0.7
         if point[3] == max_mass:
             point[2] = point[2] * 0.4
             point[1] = point[1] * 0.4
-        return (point[0][0], point[0][1] + point[2] / 0.4 + math.copysign(point[2], 2 * point[2]))
+            return (point[0][0], point[0][1] + point[2] / 0.4 + math.copysign(point[2], 2 * point[2]))
+        return (point[0][0], point[0][1] + point[2] / 0.7 + math.copysign(point[2], 2 * point[2]))
     return (point[0][0] + point[1], point[0][1] + point[2])
 
 

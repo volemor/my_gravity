@@ -38,20 +38,21 @@ def update_pos(point):
         point[2] *= -1
         if point[4] == max_mass:
             point[0] += point[2]
-            point[3] *= 0.9
-            point[2] *= 0.9
+            point[3] *= 0.5
+            point[2] *= 0.5
             return True
         point[0] += point[2]
-        # point[3] *= 0.9
+        point[2] *= 0.9
         return True
     if abc_y >= heght - roff or abc_y <= roff:
         point[3] *= -1
         if point[4] == max_mass:
             point[1] += point[3]
-            point[3] *= 0.9
-            point[2] *= 0.9
+            point[3] *= 0.5
+            point[2] *= 0.5
             return True
         point[1] += point[3]
+        point[3] *= 0.9
         return True
     point[0] += point[2]
     point[1] += point[3]
